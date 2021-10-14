@@ -27,7 +27,7 @@ class OwnerTest {
 	private Pet cat, dog, rabbit, parrot;
 
 	@BeforeEach
-	void init() {
+	void Setup() {
 		ownerAddress = "915 Smith Rd.Whitehall, PA 18052";
 		ownerCity = "Sydney";
 		ownerTelephone = "+2142406944";
