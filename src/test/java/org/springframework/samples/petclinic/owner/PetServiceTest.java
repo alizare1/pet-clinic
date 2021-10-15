@@ -1,193 +1,72 @@
 package org.springframework.samples.petclinic.owner;
 
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.samples.petclinic.utility.PetTimedCache;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-class OwnerTest {
-	private Owner owner;
-	private String ownerAddress;
-	private String ownerCity;
-	private String ownerTelephone;
-	private String ownerFirstName;
-	private String ownerLastName;
-	Integer ownerId;
-	private Pet cat, dog, rabbit, parrot;
+@RunWith(Parameterized.class)
+public class PetServiceTest {
+	private OwnerRepository ownerRepository;
+	private final PetService petService;
+
+	private static Pet cat, dog, rabbit, parrot;
+
+	private final int id;
+	private final Pet expectedPet;
+
+	public PetServiceTest(int id, Pet pet) {
+		this.id = id;
+		this.expectedPet = pet;
+
+		PetTimedCache cache = mock(PetTimedCache.class);
+		Logger logger = LoggerFactory.getLogger("");
+		petService = new PetService(cache, ownerRepository, logger);
+
+		when(cache.get(2)).thenReturn(dog);
+		when(cache.get(17)).thenReturn(dog);
+		when(cache.get(29)).thenReturn(rabbit);
+		when(cache.get(6)).thenReturn(parrot);
+	}
 
 	@BeforeEach
 	void Setup() {
-		ownerAddress = "915 Smith Rd.Whitehall, PA 18052";
-		ownerCity = "Sydney";
-		ownerTelephone = "+2142406944";
-		ownerFirstName = "Jolie";
-		ownerLastName = "Londyn";
-		ownerId = 1;
-
-		owner = new Owner();
-		owner.setAddress(ownerAddress);
-		owner.setCity(ownerCity);
-		owner.setTelephone(ownerTelephone);
-		owner.setFirstName(ownerFirstName);
-		owner.setLastName(ownerLastName);
-		owner.setId(ownerId);
-
 		cat = new Pet();
 		cat.setName("cat");
+		cat.setId(1);
 
 		dog = new Pet();
 		dog.setName("dog");
+		cat.setId(2);
 
 		rabbit = new Pet();
 		rabbit.setName("rabbit");
+		cat.setId(3);
 
 		parrot = new Pet();
 		parrot.setName("parrot");
+		cat.setId(4);
+	}
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> parameters() {
+		return Arrays.asList (new Object [][]{
+			{1, cat}, {2, dog}, {3, rabbit}, {4, parrot}
+		});
 	}
 
 	@Test
-	void getAddressShouldReturnProperly() {
-		String expectedAddress = ownerAddress;
-		String actualAddress = owner.getAddress();
-		assertEquals(expectedAddress, actualAddress);
-	}
-
-	@Test
-	void getCityShouldReturnProperly() {
-		String expectedCity = ownerCity;
-		String actualCity = owner.getCity();
-		assertEquals(expectedCity, actualCity);
-	}
-
-	@Test
-	void getFirstNameShouldReturnProperly() {
-		String expectedFirstName = ownerFirstName;
-		String actualFirstName = owner.getFirstName();
-		assertEquals(expectedFirstName, actualFirstName);
-	}
-
-	@Test
-	void getLastNameShouldReturnProperly() {
-		String expectedLastName = ownerLastName;
-		String actualLastName = owner.getLastName();
-		assertEquals(expectedLastName, actualLastName);
-	}
-
-	@Test
-	void getIdShouldReturnProperly() {
-		Integer expectedId = ownerId;
-		Integer actualId = owner.getId();
-		assertEquals(expectedId, actualId);
-	}
-
-	@Test
-	void getPetsInternalShouldReturnCorrectlyWhenNoPetIsAdded() {
-		Set<Pet> expectedPets = new HashSet<>();
-		Set<Pet> actualPets = owner.getPetsInternal();
-		assertEquals(expectedPets, actualPets);
-	}
-
-	@Test
-	void getPetsInternalShouldReturnCorrectlyWhenSomePetsAreAdded() {
-		Set<Pet> expectedPets = new HashSet<>();
-		expectedPets.add(dog);
-		expectedPets.add(parrot);
-		expectedPets.add(cat);
-
-		owner.addPet(dog);
-		owner.addPet(parrot);
-		owner.addPet(cat);
-		Set<Pet> actualPets = owner.getPetsInternal();
-
-		assertEquals(expectedPets, actualPets);
-	}
-
-	@Test
-	void getPetsShouldReturnCorrectlyWhenNoPetIsAdded() {
-		List<Pet> expectedPets = new ArrayList<>();
-
-		List<Pet> actualPets = owner.getPets();
-
-		assertEquals(expectedPets, actualPets);
-	}
-
-	@Test
-	void getPetsShouldSortAndReturnCorrectlyWhenSomePetsAreAdded() {
-		List<Pet> pets = new ArrayList<>();
-		pets.add(dog);
-		pets.add(parrot);
-		pets.add(cat);
-		List<Pet> expectedPets = new ArrayList<>(pets);
-		PropertyComparator.sort(expectedPets, new MutableSortDefinition("name", true, true));
-
-		owner.addPet(dog);
-		owner.addPet(parrot);
-		owner.addPet(cat);
-		List<Pet> actualPets = owner.getPets();
-
-		assertEquals(expectedPets, actualPets);
-	}
-
-	@Test
-	void addPetShouldProperlyAddNewPets() {
-		owner.addPet(rabbit);
-		owner.addPet(parrot);
-
-		assertEquals(rabbit, owner.getPet(rabbit.getName()));
-		assertEquals(parrot, owner.getPet(parrot.getName()));
-		assertEquals(2, owner.getPets().size());
-
-		assertEquals(rabbit.getOwner(), owner);
-		assertEquals(parrot.getOwner(), owner);
-	}
-
-	@Test
-	void addPetShouldProperlyAddPetsWithId() {
-		owner.addPet(rabbit);
-		rabbit.setId(1);
-
-		assertEquals(rabbit, owner.getPet(rabbit.getName()));
-		assertEquals(rabbit.getOwner(), owner);
-		assertEquals(1, owner.getPets().size());
-	}
-
-	@Test
-	void removePetShouldProperlyRemoveAddedPets() {
-		owner.addPet(cat);
-		owner.removePet(cat);
-
-		assertNull(owner.getPet(dog.getName()));
-		assertTrue(owner.getPets().isEmpty());
-	}
-
-	@Test
-	void getPetShouldReturnExistingPetProperly() {
-		owner.addPet(cat);
-
-		assertEquals(cat, owner.getPet(cat.getName()));
-	}
-
-	@Test
-	void getPetShouldReturnNullWhenPetDoesNotExists() {
-		assertNull(owner.getPet(dog.getName()));
-	}
-
-	@Test
-	void getPetShouldReturnExistingPetWithIdProperly() {
-		owner.addPet(parrot);
-		parrot.setId(1);
-
-		assertEquals(parrot, owner.getPet(parrot.getName(), true));
+	public void findPetShouldReturnPetProperly() {
+		assertEquals(expectedPet, petService.findPet(id));
 	}
 }
