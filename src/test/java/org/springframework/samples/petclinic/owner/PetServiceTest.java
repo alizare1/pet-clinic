@@ -67,6 +67,6 @@ public class PetServiceTest {
 
 	@Test
 	public void findPetShouldReturnPetProperly() {
-		assertEquals(expectedPet, petService.findPet(id));
+		assertEquals(expectedPet, petService.findPet(id), "unexpected pet");
 	}
 }
