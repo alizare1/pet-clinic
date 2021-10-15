@@ -60,42 +60,42 @@ class OwnerTest {
 	void getAddressShouldReturnProperly() {
 		String expectedAddress = ownerAddress;
 		String actualAddress = owner.getAddress();
-		assertEquals(expectedAddress, actualAddress);
+		assertEquals(expectedAddress, actualAddress, "unexpected owners address");
 	}
 
 	@Test
 	void getCityShouldReturnProperly() {
 		String expectedCity = ownerCity;
 		String actualCity = owner.getCity();
-		assertEquals(expectedCity, actualCity);
+		assertEquals(expectedCity, actualCity, "unexpected owners city");
 	}
 
 	@Test
 	void getFirstNameShouldReturnProperly() {
 		String expectedFirstName = ownerFirstName;
 		String actualFirstName = owner.getFirstName();
-		assertEquals(expectedFirstName, actualFirstName);
+		assertEquals(expectedFirstName, actualFirstName, "unexpected owners first name");
 	}
 
 	@Test
 	void getLastNameShouldReturnProperly() {
 		String expectedLastName = ownerLastName;
 		String actualLastName = owner.getLastName();
-		assertEquals(expectedLastName, actualLastName);
+		assertEquals(expectedLastName, actualLastName, "unexpected owners last name");
 	}
 
 	@Test
 	void getIdShouldReturnProperly() {
 		Integer expectedId = ownerId;
 		Integer actualId = owner.getId();
-		assertEquals(expectedId, actualId);
+		assertEquals(expectedId, actualId, "unexpected owners id");
 	}
 
 	@Test
 	void getPetsInternalShouldReturnCorrectlyWhenNoPetIsAdded() {
 		Set<Pet> expectedPets = new HashSet<>();
 		Set<Pet> actualPets = owner.getPetsInternal();
-		assertEquals(expectedPets, actualPets);
+		assertEquals(expectedPets, actualPets, "unexpected owners pets");
 	}
 
 	@Test
@@ -110,7 +110,7 @@ class OwnerTest {
 		owner.addPet(cat);
 		Set<Pet> actualPets = owner.getPetsInternal();
 
-		assertEquals(expectedPets, actualPets);
+		assertEquals(expectedPets, actualPets, "unexpected owners pets");
 	}
 
 	@Test
@@ -119,7 +119,7 @@ class OwnerTest {
 
 		List<Pet> actualPets = owner.getPets();
 
-		assertEquals(expectedPets, actualPets);
+		assertEquals(expectedPets, actualPets, "unexpected owners pets");
 	}
 
 	@Test
@@ -136,7 +136,7 @@ class OwnerTest {
 		owner.addPet(cat);
 		List<Pet> actualPets = owner.getPets();
 
-		assertEquals(expectedPets, actualPets);
+		assertEquals(expectedPets, actualPets, "unexpected owners pets");
 	}
 
 	@Test
@@ -144,12 +144,12 @@ class OwnerTest {
 		owner.addPet(rabbit);
 		owner.addPet(parrot);
 
-		assertEquals(rabbit, owner.getPet(rabbit.getName()));
-		assertEquals(parrot, owner.getPet(parrot.getName()));
+		assertEquals(rabbit, owner.getPet(rabbit.getName()), "unexpected owners pet");
+		assertEquals(parrot, owner.getPet(parrot.getName()), "unexpected owners pet");
 		assertEquals(2, owner.getPets().size());
 
-		assertEquals(rabbit.getOwner(), owner);
-		assertEquals(parrot.getOwner(), owner);
+		assertEquals(rabbit.getOwner(), owner, "unexpected pets owner");
+		assertEquals(parrot.getOwner(), owner, "unexpected pets owner");
 	}
 
 	@Test
@@ -157,9 +157,9 @@ class OwnerTest {
 		owner.addPet(rabbit);
 		rabbit.setId(1);
 
-		assertEquals(rabbit, owner.getPet(rabbit.getName()));
-		assertEquals(rabbit.getOwner(), owner);
-		assertEquals(1, owner.getPets().size());
+		assertEquals(rabbit, owner.getPet(rabbit.getName()), "unexpected owners pet");
+		assertEquals(rabbit.getOwner(), owner, "unexpected pets owner");
+		assertEquals(1, owner.getPets().size(), "unexpected pets size");
 	}
 
 	@Test
@@ -167,20 +167,20 @@ class OwnerTest {
 		owner.addPet(cat);
 		owner.removePet(cat);
 
-		assertNull(owner.getPet(dog.getName()));
-		assertTrue(owner.getPets().isEmpty());
+		assertNull(owner.getPet(dog.getName()), "unexpected not null pet");
+		assertTrue(owner.getPets().isEmpty(), "unexpected unemptyness of pets");
 	}
 
 	@Test
 	void getPetShouldReturnExistingPetProperly() {
 		owner.addPet(cat);
 
-		assertEquals(cat, owner.getPet(cat.getName()));
+		assertEquals(cat, owner.getPet(cat.getName()), "unexpected owners pet");
 	}
 
 	@Test
 	void getPetShouldReturnNullWhenPetDoesNotExists() {
-		assertNull(owner.getPet(dog.getName()));
+		assertNull(owner.getPet(dog.getName()), "unexpected not null pet");
 	}
 
 	@Test
@@ -188,6 +188,6 @@ class OwnerTest {
 		owner.addPet(parrot);
 		parrot.setId(1);
 
-		assertEquals(parrot, owner.getPet(parrot.getName(), true));
+		assertEquals(parrot, owner.getPet(parrot.getName(), true), "unexpected owners pet");
 	}
 }
