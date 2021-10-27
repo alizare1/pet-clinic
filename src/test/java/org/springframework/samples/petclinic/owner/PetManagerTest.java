@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.springframework.samples.petclinic.visit.Visit;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -149,7 +150,7 @@ class PetManagerTest {
 	public void TestGetOwnerPetsReturnsOwnerPets() {
 		Owner owner = mock(Owner.class);
 		owner.setId(10);
-		List<Pet> ownerPets = List.of(dog, cat, parrot);
+		List<Pet> ownerPets = Arrays.asList(dog, cat, parrot);
 
 		when(ownerRepository.findById(owner.getId())).thenReturn(owner);
 		when(owner.getPets()).thenReturn(ownerPets);
@@ -170,7 +171,7 @@ class PetManagerTest {
 		LocalDate end = LocalDate.of(2022, 4, 15);
 		Visit firstVisit = mock(Visit.class);
 		Visit secondVisit = mock(Visit.class);
-		List<Visit> petVisits = List.of(firstVisit, secondVisit);
+		List<Visit> petVisits = Arrays.asList(firstVisit, secondVisit);
 
 		when(pets.get(pet.getId())).thenReturn(pet);
 		when(pet.getVisitsBetween(start, end)).thenReturn(petVisits);
