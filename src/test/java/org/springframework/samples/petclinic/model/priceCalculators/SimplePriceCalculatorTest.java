@@ -44,7 +44,7 @@ public class SimplePriceCalculatorTest {
 	}
 
 	@Test
-	public void testCalcPriceCalculatePriceProperlyForEmptyPetsAndOldUser() {
+	public void testCalcPriceCalculatePriceProperlyForEmptyPetsAndGoldUser() {
 		List<Pet> pets = new ArrayList<>();
 
 		double price = new SimplePriceCalculator().calcPrice(pets, baseCharge, basePricePerPet, UserType.GOLD);
@@ -64,7 +64,7 @@ public class SimplePriceCalculatorTest {
 	}
 
 	@Test
-	public void testCalcPriceCalculatePriceProperlyForNotRarePetsAndOldUser() {
+	public void testCalcPriceCalculatePriceProperlyForNotRarePetsAndGoldUser() {
 		List<Pet> pets = new ArrayList<>();
 		pets.add(normalPet);
 
@@ -91,7 +91,7 @@ public class SimplePriceCalculatorTest {
 	}
 
 	@Test
-	public void testCalcPriceCalculatePriceProperlyForRarePetsAndOldUser() {
+	public void testCalcPriceCalculatePriceProperlyForRarePetsAndGoldUser() {
 		List<Pet> pets = new ArrayList<>();
 		pets.add(normalPet);
 
