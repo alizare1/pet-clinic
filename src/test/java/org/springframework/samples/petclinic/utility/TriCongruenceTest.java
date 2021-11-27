@@ -14,9 +14,27 @@ class TriCongruenceTest {
 	private static final Logger log = LoggerFactory.getLogger(TriCongruenceTest.class);
 
 	@Test
-	public void sampleTest() {
-		Triangle t1 = new Triangle(2, 3, 7);
-		Triangle t2 = new Triangle(7, 2, 3);
+	public void test1() {
+		Triangle t1 = new Triangle(3, 6, 7);
+		Triangle t2 = new Triangle(5, 3, 7);
+		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+		Assertions.assertFalse(areCongruent);
+	}
+
+	@Test
+	public void test2() {
+		Triangle t1 = new Triangle(1, 3, 2);
+		Triangle t2 = new Triangle(2, 1.5, 3);
+		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+		Assertions.assertFalse(areCongruent);
+	}
+
+	@Test
+	public void test3() {
+		Triangle t1 = new Triangle(5, 6, 8);
+		Triangle t2 = new Triangle(6, 8, 3);
 		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
 		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
 		Assertions.assertFalse(areCongruent);
