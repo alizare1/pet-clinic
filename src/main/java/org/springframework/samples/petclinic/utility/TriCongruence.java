@@ -2,7 +2,7 @@ package org.springframework.samples.petclinic.utility;
 
 import java.util.Arrays;
 
-public class TriCongruence {
+public class 	TriCongruence {
 
 	public static boolean areCongruent(Triangle t1, Triangle t2){
 		double[] t1arr = {t1.getA(), t1.getB(), t1.getC()};
