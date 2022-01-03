@@ -52,12 +52,12 @@ public class FindPetFeatureSteps {
 	}
 
 	@When("The pet is looked up by his ID")
-	public void heIsLookedUpById() {
+	public void petIsLookedUpById() {
 		actualResult = petService.findPet(pet.getId());
 	}
 
 	@Then("The pet is returned correctly")
-	public void ownerIsReturned() {
+	public void petIsReturned() {
 		assertEquals(pet.getId(), actualResult.getId());
 	}
 }
